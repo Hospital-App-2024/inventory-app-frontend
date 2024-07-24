@@ -12,7 +12,7 @@ export const Sidebar = () => {
     <aside
       className={cn(
         "shadow-lg w-14 bg-background transition-all",
-        isOpen && "w-60"
+        isOpen && "w-72"
       )}
     >
       <SidebarHeader isOpen={isOpen} toggleSidebar={toggleSidebar} />
