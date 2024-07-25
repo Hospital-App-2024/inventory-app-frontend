@@ -2,20 +2,11 @@
 
 import {
   ColumnDef,
-  SortingState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 import {
   Table,
@@ -25,26 +16,37 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
-import { IoChevronForwardOutline } from "react-icons/io5";
-import { IoChevronBackOutline } from "react-icons/io5";
+import { IMeta } from "@/interfaces/meta.interface";
+import { useSearchParams } from "next/navigation";
+import { TablePagination } from "./TablePagination";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  meta: IMeta;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  meta,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const params = useSearchParams();
+  const limit = params.get("limit");
 
   const table = useReactTable({
     data,
     columns,
+    autoResetPageIndex: true,
+    rowCount: meta.totalPages,
+    state: {
+      pagination: {
+        pageSize: limit ? +limit : 5,
+        pageIndex: meta.currentPage - 1,
+      },
+    },
+    manualPagination: true,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
@@ -53,7 +55,7 @@ export function DataTable<TData, TValue>({
     <div>
       <div className="rounded-md border bg-background">
         <Table>
-          <TableHeader className="bg-primary text-lg">
+          <TableHeader className="bg-primary">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -71,7 +73,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
-          <TableBody className="text-lg">
+          <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -94,53 +96,18 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Sin resultados
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
       </div>
-      <div className="flex w-full justify-between p-4 bg-background">
-        <div className="flex items-center space-x-2">
-          <p className="text-sm font-medium">Rows per page</p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value));
-            }}
-          >
-            <SelectTrigger className="h-8 w-[70px]">
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center justify-end space-x-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <IoChevronBackOutline size={20} />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <IoChevronForwardOutline size={20} />
-          </Button>
-        </div>
-      </div>
+
+      <TablePagination
+        {...meta}
+        pageSize={table.getState().pagination.pageSize}
+      />
     </div>
   );
 }

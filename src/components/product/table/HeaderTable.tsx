@@ -1,4 +1,4 @@
-import { CreateItemForm } from "@/components/inventory/form/CreateItemForm";
+import { CreateItemForm } from "@/components/product/form/CreateItemForm";
 import { MainModal } from "@/components/modal/MainModal";
 
 interface Props {

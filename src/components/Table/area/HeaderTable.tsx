@@ -1,5 +1,5 @@
-import { CreateItemForm } from "@/components/inventory/form/CreateItemForm";
 import { MainModal } from "@/components/modal/MainModal";
+import { ProductForm } from "@/components/product/form/ProductForm";
 
 interface Props {
   title: string;
@@ -10,11 +10,11 @@ export const HeaderTable = ({ title }: Props) => {
     <div className="mb-2 flex justify-between">
       <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
       <MainModal
-        label="Agregar Item"
-        title="Agregar Item"
-        subtitle="Complete el formulario para agregar un nuevo item"
+        label="Agregar Producto"
+        title="Agregar Producto"
+        subtitle="Complete el formulario para agregar un nuevo producto"
       >
-        <CreateItemForm />
+        <ProductForm />
       </MainModal>
     </div>
   );

@@ -1,4 +1,4 @@
-import { ObservationStatus } from "@/interfaces/inventory";
+import { ProductStatus } from "@/interfaces/product.interface";
 import { z } from "zod";
 
 export const areas = z.object({
@@ -20,18 +20,20 @@ export const workers = z.object({
 
 export type WorkerFormValue = z.infer<typeof workers>;
 
-export const ItemFormSchema = z.object({
-  images: z.custom<File[]>(),
+export const ProductFormSchema = z.object({
+  file: z.custom<File>().optional(),
   name: z
     .string()
     .min(3, "Mínimo 3 caracteres")
     .max(50, "Máximo 50 caracteres"),
-  tool: z
-    .string()
-    .min(3, "Mínimo 3 caracteres")
-    .max(50, "Máximo 50 caracteres"),
+  resourceId: z.string().uuid(),
   quantity: z.number().int().min(1, "Mínimo 1").max(10000, "Máximo 10000"),
-  status: z.nativeEnum(ObservationStatus),
+  status: z.enum([
+    ProductStatus.GOOD,
+    ProductStatus.BAD,
+    ProductStatus.DISCONTINUED,
+    ProductStatus.TRANSFERRED,
+  ]),
 });
 
-export type ItemFormValue = z.infer<typeof ItemFormSchema>;
+export type ProductFormValue = z.infer<typeof ProductFormSchema>;

@@ -3,27 +3,27 @@ import { MdOutlineInventory2 } from "react-icons/md";
 import { GrUserWorker } from "react-icons/gr";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
-const className = "w-6 h-6";
+const className = "w-6 h-6 text-primary";
 
 export const menuItems = [
   {
     path: "/",
     title: "Dashboard",
-    icon: <MdOutlineDashboard className={`text-indigo-600 ${className}`} />,
+    icon: <MdOutlineDashboard className={className} />,
   },
   {
     path: "/inventory",
     title: "Inventario",
-    icon: <MdOutlineInventory2 className={`text-indigo-600 ${className}`} />,
+    icon: <MdOutlineInventory2 className={className} />,
   },
   {
     path: "/workers",
     title: "Trabajadores",
-    icon: <GrUserWorker className={`text-indigo-600 ${className}`} />,
+    icon: <GrUserWorker className={className} />,
   },
   {
     path: "/areas",
     title: "Áreas",
-    icon: <FaMapMarkerAlt className={`text-indigo-600 ${className}`} />,
+    icon: <FaMapMarkerAlt className={className} />,
   },
 ];
