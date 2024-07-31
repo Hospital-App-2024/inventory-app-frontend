@@ -17,13 +17,8 @@ export const menuItems = [
     icon: <MdOutlineInventory2 className={className} />,
   },
   {
-    path: "/workers",
-    title: "Trabajadores",
+    path: "/owner",
+    title: "Propietarios",
     icon: <GrUserWorker className={className} />,
-  },
-  {
-    path: "/areas",
-    title: "Áreas",
-    icon: <FaMapMarkerAlt className={className} />,
   },
 ];

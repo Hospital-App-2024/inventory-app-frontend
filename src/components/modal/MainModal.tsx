@@ -13,7 +13,7 @@ import {
 interface Props {
   children: React.ReactNode;
   title: string;
-  label: string;
+  label?: string;
   subtitle: string;
   icon?: React.ReactNode;
   disabled?: boolean;
@@ -50,7 +50,7 @@ export const MainModal = ({
           className="text-base"
         >
           {icon ? icon : <RiMenuAddLine size={20} />}
-          <span className="ml-2">{label}</span>
+          {label && <span className="ml-2">{label}</span>}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px]">

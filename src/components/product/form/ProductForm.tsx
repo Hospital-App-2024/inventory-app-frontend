@@ -1,12 +1,12 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useTransition } from "react";
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,41 +15,83 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { ProductFormSchema, ProductFormValue } from "@/schema/Product.schema";
-import { useDropzone } from "react-dropzone";
-import Image from "next/image";
-import { FormSelectResource } from "@/components/form/FormSelectResource";
+import { FormSelectOwner } from "@/components/form/FormSelectOwner";
+import { ButtonForm } from "@/components/form/ButtonForm";
+import { createProduct } from "@/action/product/createProduct";
+import { toast } from "sonner";
+import { IProductWithOwner } from "@/interfaces/product.interface";
+import { updateProduct } from "../../../action/product/updateProduct";
+import { FormSelectImage } from "@/components/form/FormSelectImage";
+import { FormSelectProductStatus } from "@/components/form/FormSelectProductStatus";
+
+interface Props {
+  toggleModal: () => void;
+  product?: IProductWithOwner;
+}
 
 const DEFAULT_VALUE = {
   file: undefined,
   name: "",
-  resourceId: "",
+  ownerId: undefined,
   quantity: 0,
   status: undefined,
+  inventoryNumber: "",
 };
 
-export const ProductForm = () => {
+export const ProductForm = (props: Props) => {
+  const { toggleModal, product } = props;
+
+  const [isPending, startTransition] = useTransition();
+  const [image, setImage] = React.useState<string | undefined>();
+
   const form = useForm<ProductFormValue>({
     resolver: zodResolver(ProductFormSchema),
     defaultValues: DEFAULT_VALUE,
   });
 
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      form.setValue("file", acceptedFiles[0]);
-    },
-    [form]
-  );
+  useEffect(() => {
+    if (product) {
+      form.setValue("name", product.name);
+      form.setValue("status", product.status);
+      form.setValue("quantity", product.quantity);
+      form.setValue("inventoryNumber", product.inventoryNumber);
+      form.setValue("ownerId", product.ownerId);
+      product.image && setImage(product.image);
+    }
+  }, [form, product]);
 
-  const { getRootProps, getInputProps, acceptedFiles } = useDropzone({
-    onDrop,
-    maxFiles: 1,
-    multiple: false,
-    accept: {
-      "image/*": [".png", ".jpg", ".jpeg"],
-    },
-  });
+  const onSubmit = (data: ProductFormValue) => {
+    startTransition(async () => {
+      const form = new FormData();
+      form.append("name", data.name);
+      form.append("ownerId", data.ownerId);
+      form.append("quantity", data.quantity.toString());
+      form.append("status", data.status);
+      form.append("inventoryNumber", data.inventoryNumber);
 
-  const onSubmit = (data: ProductFormValue) => {};
+      if (data.file) {
+        form.append("file", data.file as File);
+      }
+
+      let item;
+
+      if (product) {
+        item = await updateProduct({ id: product.id, values: form });
+      } else {
+        item = await createProduct(form);
+      }
+
+      if (item.error) {
+        toast.error(item.error);
+        return;
+      }
+
+      const message = product ? "Producto actualizado" : "Producto creado";
+
+      toast.success(message);
+      toggleModal();
+    });
+  };
 
   return (
     <Form {...form}>
@@ -59,7 +101,7 @@ export const ProductForm = () => {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nombre</FormLabel>
+              <FormLabel>Producto</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -69,6 +111,32 @@ export const ProductForm = () => {
         />
 
         <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="inventoryNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Número de inventario</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormSelectProductStatus
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+
           <FormField
             control={form.control}
             name="quantity"
@@ -85,12 +153,9 @@ export const ProductForm = () => {
 
           <FormField
             control={form.control}
-            name="resourceId"
+            name="ownerId"
             render={({ field }) => (
-              <FormSelectResource
-                value={field.value}
-                onChange={field.onChange}
-              />
+              <FormSelectOwner value={field.value} onChange={field.onChange} />
             )}
           />
         </div>
@@ -99,32 +164,19 @@ export const ProductForm = () => {
           control={form.control}
           name="file"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Imagen</FormLabel>
-              <FormControl>
-                <div
-                  {...getRootProps()}
-                  className="border-2 border-dashed p-2 rounded-md h-52 w-full"
-                >
-                  <input {...getInputProps()} />
-                  {acceptedFiles[0] ? (
-                    <div className="h-full w-full overflow-hidden">
-                      <Image
-                        alt="product-image"
-                        width={1000}
-                        height={1000}
-                        className="object-contain size-full"
-                        src={URL.createObjectURL(acceptedFiles[0])}
-                      />
-                    </div>
-                  ) : (
-                    <p className="text-gray-400">Selecciona una imagen</p>
-                  )}
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <FormSelectImage
+              onChange={field.onChange}
+              value={field.value}
+              name={field.name}
+              image={image}
+            />
           )}
+        />
+
+        <ButtonForm
+          isDisabled={isPending}
+          title={product ? "Editar" : "Crear"}
+          type="submit"
         />
       </form>
     </Form>

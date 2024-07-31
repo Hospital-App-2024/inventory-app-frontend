@@ -1,26 +1,32 @@
 import { IMeta } from "./meta.interface";
 
 export interface IResponseProducts {
-  data: IProductWithResource[];
+  data: IProductWithOwner[];
   meta: IMeta;
 }
 
-export type TStatusType = "Bueno" | "Malo" | "Dado de baja" | "Traspasado";
+export interface IProductWithOwner extends IProduct {
+  ownerName: string;
+  ownerType: string;
+}
 
-export interface IProductWithResource {
+export type TStatus = "GOOD" | "BAD" | "DISCONTINUED" | "TRANSFERRED";
+
+export interface IProduct {
+  createdAt: string;
   id: string;
-  image: string;
+  image: string | null;
+  inventoryNumber: string;
   name: string;
+  ownerId: string;
   quantity: number;
-  resourceId: string;
-  resourceName: string;
-  resourceType: string;
-  status: TStatusType;
+  status: TStatus;
+  updatedAt: string;
 }
 
 export enum ProductStatus {
-  GOOD = "Bueno",
-  BAD = "Malo",
-  DISCONTINUED = "Dada de baja",
-  TRANSFERRED = "Transferido",
+  "GOOD" = "Bueno",
+  "BAD" = "Malo",
+  "DISCONTINUED" = "Dado de baja",
+  "TRANSFERRED" = "Transferido",
 }

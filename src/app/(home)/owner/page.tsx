@@ -1,5 +1,5 @@
-import { HeaderProductTable } from "@/components/product/table/HeaderProductTable";
-import { Products } from "@/components/product/table/Products";
+import { HeaderOwnerTable } from "@/components/owner/table/HeaderOwnerTable";
+import { Owners } from "@/components/owner/table/Owners";
 
 interface Props {
   searchParams: {
@@ -8,14 +8,14 @@ interface Props {
   };
 }
 
-export default function InventoryPage({ searchParams }: Props) {
+export default function OwnerPage({ searchParams }: Props) {
   const page = searchParams.page ? parseInt(searchParams.page) : 1;
   const limit = searchParams.limit ? parseInt(searchParams.limit) : 5;
 
   return (
     <div className="container py-5 mt-6 bg-white shadow">
-      <HeaderProductTable />
-      <Products limit={limit} page={page} />
+      <HeaderOwnerTable />
+      <Owners limit={limit} page={page} />
     </div>
   );
 }
