@@ -1,3 +1,4 @@
+"use client";
 import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
 import { Button } from "../ui/button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
