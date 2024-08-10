@@ -9,15 +9,16 @@ interface IPagination {
 
 interface IPaginationAndSearch extends IPagination {
   search?: string;
+  productStatus?: string;
 }
 
 export const findAllProducts = async (
   paginationAndSearch: IPaginationAndSearch
 ): Promise<IResponseProducts> => {
-  const { limit, page, search } = paginationAndSearch;
+  const { limit, page, search, productStatus } = paginationAndSearch;
 
   const data = await fetch(
-    `${URL_BACKEND}/products?page=${page}&limit=${limit}`,
+    `${URL_BACKEND}/products?page=${page}&limit=${limit}&search=${search}`,
     {
       method: "GET",
       next: {

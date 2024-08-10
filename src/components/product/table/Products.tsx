@@ -6,6 +6,8 @@ import { TablePagination } from "@/components/Table/TablePagination";
 interface Props {
   page: number;
   limit: number;
+  search?: string;
+  productStatus?: string;
 }
 
 const columns = [
@@ -18,18 +20,27 @@ const columns = [
   "Acciones",
 ];
 
-export const Products = async ({ limit, page }: Props) => {
-  const data = await findAllProducts({ page: page, limit: limit });
+export const Products = async ({
+  limit,
+  page,
+  search,
+  productStatus,
+}: Props) => {
+  const data = await findAllProducts({
+    page: page,
+    limit: limit,
+    search: search,
+    productStatus: productStatus,
+  });
 
   return (
     <>
       <MainTable columns={columns} totalPages={data.meta.totalPages}>
-        {data.data.map((product) => (
+        {data.data?.map((product) => (
           <ProductItemTable key={product.id} product={product} />
         ))}
       </MainTable>
       <TablePagination
-        currentPage={data.meta.currentPage}
         nextPage={data.meta.nextPage}
         prevPage={data.meta.prevPage}
         totalPages={data.meta.totalPages}

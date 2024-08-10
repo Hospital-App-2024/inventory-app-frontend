@@ -22,8 +22,6 @@ interface Props {
 export const FormSelectProductStatus = (props: Props) => {
   const { value, onChange, name } = props;
 
-  console.count("FormSelectProductStatus");
-
   const handleChange = (value: string) => {
     if (!value) return;
     onChange(value);

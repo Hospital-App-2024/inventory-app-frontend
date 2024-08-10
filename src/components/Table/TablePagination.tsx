@@ -15,12 +15,11 @@ interface Props {
   totalPages: number;
   nextPage: number | null;
   prevPage: number | null;
-  currentPage: number;
   pageSize: number;
 }
 
 export const TablePagination = (props: Props) => {
-  const { totalPages, nextPage, prevPage, currentPage, pageSize } = props;
+  const { totalPages, nextPage, prevPage, pageSize } = props;
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
