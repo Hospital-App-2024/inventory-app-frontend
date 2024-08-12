@@ -1,3 +1,4 @@
+"use client";
 import { menuItems } from "@/constants/menuItems";
 import { cn } from "@/lib/utils";
 import Link from "next/link";

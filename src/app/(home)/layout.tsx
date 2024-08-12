@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <div className="h-screen flex w-screen">
       <Sidebar />
-      <main className="bg-gray-100 p-2 md:p-4 lg:p-6 w-full overflow-hidden">
+      <main className="bg-gray-100 p-2 md:p-4 lg:p-6 w-full overflow-hidden ml-14">
         {children}
       </main>
     </div>
