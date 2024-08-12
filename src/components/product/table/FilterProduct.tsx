@@ -23,6 +23,12 @@ export const FilterProduct = () => {
 
   const handleSearch = (value: string) => {
     if (value === null) return null;
+    if (value.length === 0) {
+      const params = new URLSearchParams(searchParams);
+      params.delete("search");
+      replace(`${pathName}?${params.toString()}`);
+      return;
+    }
     const params = new URLSearchParams(searchParams);
     params.set("search", value);
     replace(`${pathName}?${params.toString()}`);

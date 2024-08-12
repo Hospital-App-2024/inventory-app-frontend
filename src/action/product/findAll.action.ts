@@ -17,16 +17,21 @@ export const findAllProducts = async (
 ): Promise<IResponseProducts> => {
   const { limit, page, search, productStatus } = paginationAndSearch;
 
-  const data = await fetch(
-    `${URL_BACKEND}/products?page=${page}&limit=${limit}&search=${search}`,
-    {
-      method: "GET",
-      next: {
-        tags: ["product"],
-      },
-      cache: "no-cache",
-    }
-  );
+  let url = `${URL_BACKEND}/products?limit=${limit}&page=${page}`;
+
+  const params = new URLSearchParams();
+  if (search) params.append("search", search);
+  if (productStatus) params.append("productStatus", productStatus);
+
+  url += `&${params}`;
+
+  const data = await fetch(url, {
+    method: "GET",
+    next: {
+      tags: ["product"],
+    },
+    cache: "no-cache",
+  });
 
   return await data.json();
 };
