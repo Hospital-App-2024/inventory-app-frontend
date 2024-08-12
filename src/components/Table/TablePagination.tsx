@@ -55,8 +55,8 @@ export const TablePagination = (props: Props) => {
   };
 
   return (
-    <div className="flex w-full justify-between p-4 bg-background">
-      <div className="flex items-center space-x-2">
+    <div className="flex w-full bg-background flex-wrap-reverse md:flex-row py-2 gap-4">
+      <div className="flex gap-2 w-full justify-center items-center">
         <p className="text-sm font-medium">Filas por página:</p>
         <Select
           value={pageSize.toString()}
@@ -78,7 +78,7 @@ export const TablePagination = (props: Props) => {
           </SelectContent>
         </Select>
       </div>
-      <div className="flex items-center justify-end space-x-2">
+      <div className="flex items-center w-full justify-between">
         <Button
           variant="outline"
           size="icon"

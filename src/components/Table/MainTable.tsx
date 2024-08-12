@@ -15,8 +15,8 @@ interface Props {
 
 export const MainTable = ({ children, columns, totalPages }: Props) => {
   return (
-    <Table className="rounded-md border bg-background">
-      <TableHeader className="bg-primary ">
+    <Table className="rounded-md bg-background">
+      <TableHeader className="bg-primary">
         <TableRow>
           {columns.map((column, index) => (
             <TableHead key={index} className="text-white">

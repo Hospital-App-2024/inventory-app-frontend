@@ -17,7 +17,7 @@ export default function InventoryPage({ searchParams }: Props) {
   const search = searchParams.search ? searchParams.search : "";
 
   return (
-    <div className="container py-5 mt-6 bg-white shadow">
+    <div className="bg-white shadow h-full p-4 flex flex-col w-full">
       <HeaderProductTable />
       <FilterProduct />
       <Products
