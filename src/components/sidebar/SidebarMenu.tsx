@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 export const SidebarMenu = () => {
   return (
-    <nav className="px-2 space-y-2 mt-2 overflow-hidden">
+    <nav className="px-2 space-y-2 mt-2 flex-1">
       {menuItems.map((item) => (
         <SidebarMenuItem
           key={item.path}

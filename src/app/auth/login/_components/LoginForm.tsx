@@ -13,6 +13,7 @@ import { loginFormSchema, LoginFormValue } from "@/schema/auth.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { ButtonForm } from "@/components/form/ButtonForm";
+import { login } from "@/action/auth/login";
 
 export const LoginForm = () => {
   const { isPending, setAlertMessage, startTransition } = useFormStatus();
@@ -26,7 +27,9 @@ export const LoginForm = () => {
   });
 
   const onSubmit = (data: LoginFormValue) => {
-    startTransition(async () => {});
+    startTransition(async () => {
+      const resp = await login(data);
+    });
   };
 
   return (
@@ -59,7 +62,7 @@ export const LoginForm = () => {
               <FormControl>
                 <Input
                   {...field}
-                  type="email"
+                  type="password"
                   placeholder="Ingresa tu correo"
                 />
               </FormControl>
