@@ -15,7 +15,7 @@ interface Props {
 
 export const MainTable = ({ children, columns, totalPages }: Props) => {
   return (
-    <Table className="rounded-md bg-background">
+    <Table className="rounded-md bg-background min-w-[1400px]">
       <TableHeader className="bg-primary">
         <TableRow>
           {columns.map((column, index) => (

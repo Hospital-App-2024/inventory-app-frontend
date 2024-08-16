@@ -40,9 +40,7 @@ export const ProductItemTable = ({ product }: Props) => {
       <TableCell>{quantity}</TableCell>
       <TableCell>{ownerName}</TableCell>
       <TableCell>
-        <Badge variant={setBadgeVariant(status)} className="text-base">
-          {ProductStatus[status]}
-        </Badge>
+        <Badge variant={setBadgeVariant(status)}>{ProductStatus[status]}</Badge>
       </TableCell>
       <TableCell>
         <CreateProductModal
