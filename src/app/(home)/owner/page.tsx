@@ -13,7 +13,7 @@ export default function OwnerPage({ searchParams }: Props) {
   const limit = searchParams.limit ? parseInt(searchParams.limit) : 5;
 
   return (
-    <div className="container py-5 mt-6 bg-white shadow">
+    <div className="bg-white shadow h-full p-4 flex flex-col w-full">
       <HeaderOwnerTable />
       <Owners limit={limit} page={page} />
     </div>
