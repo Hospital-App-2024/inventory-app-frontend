@@ -5,13 +5,15 @@ export interface IResponseOwner {
   meta: IMeta;
 }
 
+export type TOwnerType = "AREA" | "WORKER";
+
 export interface IOwner {
   id: string;
   name: string;
-  type: string;
+  type: TOwnerType;
 }
 
 export enum OwnerType {
-  AREA = "Area",
-  WORKER = "Trabajador",
+  "AREA" = "Area",
+  "WORKER" = "Trabajador",
 }
