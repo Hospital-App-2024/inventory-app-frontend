@@ -45,7 +45,7 @@ export const FormSelectOwner = (props: Props) => {
         <Select onValueChange={onChange} value={value}>
           <FormControl>
             <SelectTrigger>
-              <SelectValue placeholder="Seleccione un propietario" />
+              <SelectValue placeholder="Seleccione propietario" />
             </SelectTrigger>
           </FormControl>
           <SelectContent>
