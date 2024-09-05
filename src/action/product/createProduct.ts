@@ -18,11 +18,12 @@ export const createProduct = async (values: FormData): Promise<IResponse> => {
     },
   });
 
+  const product = await resp.json();
+
   if (!resp.ok) {
-    return { error: "Ocurrió un error al crear el producto" };
+    return { error: product?.message ||  "Error al crear el producto"};
   }
 
-  const product = await resp.json();
 
   revalidateTag("product");
   return { body: product };

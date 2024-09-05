@@ -15,9 +15,13 @@ export function createSession(data: LoginResponse) {
   cookies().set(CookieName.USER, encryptCookie(JSON.stringify(data.user)), options);
 }
 
-export function getSession(): { token: string, user: User } {
+export function getSession(): { token: string; user: User} | null {
   const token = cookies().get(CookieName.SESSION);
   const user = cookies().get(CookieName.USER);
+
+  if (!token || !user) {
+    return null
+  }
 
   return {
     token: decryptCookie(token?.value),

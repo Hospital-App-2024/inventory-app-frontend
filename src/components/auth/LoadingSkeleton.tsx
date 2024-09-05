@@ -1,4 +1,4 @@
-export const Loading = () => {
+export const LoadingSkeleton = () => {
   return (
     <div className="h-screen w-screen overflow-hidden flex justify-center items-center">
       <div role="status">
