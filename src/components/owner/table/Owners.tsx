@@ -10,7 +10,9 @@ interface Props {
 
 const columns = [
   "Propietario",
-  "Tipo"
+  "Tipo",
+  "Total Productos",
+  "Acciones"
 ]
 
 export const Owners = async ({ limit, page }: Props) => {

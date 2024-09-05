@@ -2,8 +2,29 @@
 import { useState } from "react";
 import { MainModal } from "@/components/modal/MainModal";
 import { OwnerForm } from "../form/OwnerForm";
+import { IOwner } from "@/interfaces/owner.interface";
 
-export const CreateOwnerModal = () => {
+interface Props {
+  label?: string;
+  title: string;
+  subtitle?: string;
+  owner?: IOwner
+  icon?: React.ReactNode;
+  variant?:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "edit";
+}
+
+export const CreateOwnerModal = ( props : Props) => {
+
+  const { subtitle, title, icon, label, owner, variant } = props;
+
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => {
@@ -12,13 +33,15 @@ export const CreateOwnerModal = () => {
 
   return (
     <MainModal
-      label="Agregar Propietario"
-      title="Agregar Propietario"
-      subtitle="Complete el formulario para agregar un nuevo propietario"
+      label={label}
+      title={title}
+      subtitle={subtitle}
       open={isOpen}
       onOpenChange={toggleModal}
+      icon={icon}
+      variant={variant}
     >
-      <OwnerForm toggleModal={toggleModal} />
+      <OwnerForm toggleModal={toggleModal} owner={owner} />
     </MainModal>
   );
 };

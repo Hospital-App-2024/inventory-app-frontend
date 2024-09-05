@@ -14,7 +14,7 @@ interface Props {
   children: React.ReactNode;
   title: string;
   label?: string;
-  subtitle: string;
+  subtitle?: string;
   icon?: React.ReactNode;
   disabled?: boolean;
   variant?:

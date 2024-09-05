@@ -1,4 +1,5 @@
 import { createOwner } from "@/action/owner/createOwner";
+import { updateOwner } from "@/action/owner/updateOwner";
 import { ButtonForm } from "@/components/form/ButtonForm";
 import {
   Form,
@@ -16,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { OwnerType } from "@/interfaces/owner.interface";
+import { IOwner, OwnerType } from "@/interfaces/owner.interface";
 import { ownerFormSchema, OwnerFormValue } from "@/schema/owner.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
@@ -25,6 +26,7 @@ import { toast } from "sonner";
 
 interface Props {
   toggleModal: () => void;
+  owner?: IOwner
 }
 
 const DEFAULT_VALUE = {
@@ -33,25 +35,40 @@ const DEFAULT_VALUE = {
 };
 
 export const OwnerForm = (props: Props) => {
-  const { toggleModal } = props;
+  const { toggleModal, owner } = props;
 
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<OwnerFormValue>({
     resolver: zodResolver(ownerFormSchema),
-    defaultValues: DEFAULT_VALUE,
+    defaultValues: owner ? {
+      name: owner.name,
+      type: owner.type
+    } : DEFAULT_VALUE,
   });
 
   const onSubmit = (data: OwnerFormValue) => {
     startTransition(async () => {
-      const owner = await createOwner(data);
+      
+      let action = null;
 
-      if (owner.error) {
-        toast.error(owner.error);
-        return;
+      if (owner) {
+        action = await updateOwner({
+          id: owner.id, 
+          values: data
+        });
+      } else {
+        action = await createOwner(data);
       }
 
-      toast.success("Propietario creado correctamente");
+      if (action.error) {
+        toast.error(action.error);
+        return;
+      };
+
+      const message = owner ? "Propietario Actualizado" : "Propietario creado correctamente"
+
+      toast.success(message);
       toggleModal();
     });
   };
@@ -66,7 +83,7 @@ export const OwnerForm = (props: Props) => {
             <FormItem>
               <FormLabel>Nombre</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} autoComplete="name" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -78,11 +95,11 @@ export const OwnerForm = (props: Props) => {
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Propietario</FormLabel>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <FormLabel>Tipo</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Seleccione un Propietario" />
+                    <SelectValue placeholder="Seleccione un Tipo" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -98,7 +115,7 @@ export const OwnerForm = (props: Props) => {
           )}
         />
 
-        <ButtonForm isDisabled={isPending} title="Crear" />
+        <ButtonForm isDisabled={isPending} title={ owner ? "Editar" : "Crear"} />
       </form>
     </Form>
   );
