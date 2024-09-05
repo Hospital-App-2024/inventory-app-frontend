@@ -23,11 +23,12 @@ export const createOwner = async (
     },
   });
 
+  const owner = await resp.json();
+  
   if (!resp.ok) {
-    return { error: "Ocurrió un error al crear el propietario" };
+    return { error: owner?.message || "Ocurrió un error al crear el propietario" };
   }
 
-  const owner = await resp.json();
   revalidateTag("owner");
   return { body: owner };
 };
